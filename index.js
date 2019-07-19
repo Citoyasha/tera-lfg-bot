@@ -31,7 +31,7 @@ bot.on('message', message => {
     var context = message.content.split(" ").slice(2).toString().replace(/,/g, " ");
     var arg = message.content.split(" ");
     var ps = "Contact party leader via Discord!";
-    const cps = message.content.split(" ").slice(4).toString().replace(/,/g, " ");
+    var ign = message.channel.guild.member(message.author).displayName;
     gd = bot.guilds.get('301831766262546432');
     chlog = gd.channels.get('466056944478584843');
     }
@@ -171,7 +171,7 @@ bot.on('message', message => {
      },
      {
        "name" : "React with ✅ when party is Full!",
-       "value" : "React with ❌ to delete lfg in all servers."
+       "value" : "**React with ❌ to delete lfg in all servers.**"
      }
    ]
      };
@@ -189,10 +189,13 @@ bot.on('message', message => {
     function lfg() {
      for (var id in data) {
       if (data.hasOwnProperty(id)) {
-       if (typeof arg[4] != "undefined") {
+      if (typeof arg[3] != "undefined") {
+         ign = arg[3];
+        };
+      if (typeof arg[4] != "undefined") {
         ps = message.content.split(" ").slice(4).toString().replace(/,/g, " ");
        };
-       embedlfg(arg[1], arg[2], arg[3], C, message.createdAt, message.guild.name,message.id, message.guild.iconURL, message.channel.guild.member(message.author).displayName + " ( " + message.author.tag + " )", message.author.avatarURL, ps, data[id].GID, data[id].channel, id, data[id].ID);
+      embedlfg(arg[1], arg[2], ign, C, message.createdAt, message.guild.name,message.id, message.guild.iconURL, message.channel.guild.member(message.author).displayName + " ( " + message.author.tag + " )", message.author.avatarURL, ps, data[id].GID, data[id].channel, id, data[id].ID);
       };
      };
     };
@@ -278,9 +281,6 @@ bot.on('message', message => {
         case "help":
           utils.Help(C,message)
           break;
-        case "nick":
-          utils.Nick(message,bot.user,context)
-          break;
         case "stats":
           stats();
           break;
@@ -311,9 +311,24 @@ bot.on('ready', () => {
 });
 
 bot.on('guildDelete', guild => {
-
-  console.log("kicked/banned/left from "+guild.name);
+  {
+  try {
+      data = require('./lfg.json');
+  } catch (e) {
+      data = {};
+  };
+  }
+  function fileaddserver() {
+   fs.writeFileSync(path.join(__dirname, "lfg.json"), JSON.stringify(data, null, 2));
+  };
+  delete data[guild.name]
+  fileaddserver();
+  gd = bot.guilds.get('301831766262546432');
+  chlog = gd.channels.get('466056944478584843');
+  chlog.send("kicked/banned/left from "+guild.name);
 
 });
 
-bot.login(TOKEN.TOKEN);
+bot.login(TOKEN.TOKEN)
+.then(console.log("Logged in!"))
+.catch(console.error);

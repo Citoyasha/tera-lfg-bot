@@ -38,11 +38,11 @@ var Help = function (c,msg){
           "value": "Shows the member count and servers list."
         },
         {
-          "name": "addserver",
+          "name": "lfg addserver",
           "value": "adds the server to the bot's lfg list. Only server owner and bot owner can use this command."
         },
         {
-          "name": "deleteserver",
+          "name": "lfg deleteserver",
           "value": "Removes the server from the bot's lfg list. Only server owner and bot owner can use this command."
         }
       ]
