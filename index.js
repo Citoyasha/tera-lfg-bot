@@ -4,11 +4,20 @@ const fs = require("fs");
 const path = require("path");
 const TOKEN = require(__dirname+'/BT.json');
 const utils = require(__dirname+'/commands/utils.js');
+const BlackList = require(__dirname+'/BL.json');
 
 bot.on('message', message => {
 
     {
       var C = ((Math.floor((Math.random() * 255) + 1)) * 65536) + ((Math.floor((Math.random() * 255) + 1)) * 256) + (Math.floor((Math.random() * 255) + 1));
+    }
+
+    {
+      try {
+        BL = require("./BL.json")
+      } catch (e) {
+        BL = {};
+      }
     }
 
     {
@@ -31,10 +40,25 @@ bot.on('message', message => {
     var context = message.content.split(" ").slice(2).toString().replace(/,/g, " ");
     var arg = message.content.split(" ");
     var ps = "Contact party leader via Discord!";
-    var ign = message.channel.guild.member(message.author).displayName;
     gd = bot.guilds.get('301831766262546432');
     chlog = gd.channels.get('466056944478584843');
+    BL = JSON.parse(JSON.stringify(BlackList));
     }
+
+    function BlackList(){
+      member = message.mentions.members.first();
+      BL[member.displayName] = {
+        "ID" : member.id
+      };
+      fs.writeFileSync(path.join(__dirname, "BL.json"), JSON.stringify(BL, null, 2));
+    };
+
+    function BlackListed(){
+      for (var user in BL){
+          if (BL[user].id === message.author.id) return false;
+      }
+      return true;
+    };
 
     function fileaddserver() {
      fs.writeFileSync(path.join(__dirname, "lfg.json"), JSON.stringify(data, null, 2));
@@ -94,7 +118,7 @@ bot.on('message', message => {
             embed
         });
 
-    }
+    };
 
     function delfg() {
       if(message.author.id === "202373842490884096"){
@@ -107,7 +131,7 @@ bot.on('message', message => {
               message.delete();
         });};
       }
-    }
+    };
 
     function delserver() {
       if((message.author.id === message.guild.ownerID) || message.author.id === "202373842490884096"){
@@ -128,7 +152,7 @@ bot.on('message', message => {
       } else {
         message.channel.send("Only Server owner or bot owner can do that!")
       };
-    }
+    };
 
     function addserver() {
       if((message.author.id === message.guild.ownerID) || message.author.id === "202373842490884096"){
@@ -145,7 +169,7 @@ bot.on('message', message => {
       } else {
         message.channel.send("Only Server owner or bot owner can do that!")
       };
-    }
+    };
 
     function embedlfg(x, y, z, cl, mc, mess, msgID, mgi, mat, maa, ps, gid, ce, ge, cid) {
      const embed = {
@@ -190,8 +214,10 @@ bot.on('message', message => {
      for (var id in data) {
       if (data.hasOwnProperty(id)) {
       if (typeof arg[3] != "undefined") {
-         ign = arg[3];
-        };
+         var ign = arg[3];
+       }else {
+         var ign = message.channel.guild.member(message.author).displayName;
+       }
       if (typeof arg[4] != "undefined") {
         ps = message.content.split(" ").slice(4).toString().replace(/,/g, " ");
        };
@@ -267,9 +293,9 @@ bot.on('message', message => {
 
      });
 
-    }
+   };
 
-    if(arg[0] === "lfg") {
+    if((arg[0] === "lfg") && (BlackListed())){
 
       switch (arg[1]) {
         case "game":
