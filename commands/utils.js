@@ -13,7 +13,7 @@ var Nick = function (msg,user,context){
 
 var Help = function (c,msg){
     const embed = {
-      "title": "Secret agent 069 help message!🎫",
+      "title": "🎫Secret agent 069 help message!🎫",
       "url": "https://discord.gg/TePFGBs",
       "description": "Secret agent 069 is a cross-server lfg bot. It sends your lfg message across discord servers the bot is connected to. Type `lfg stats` to see all the servers the bot is in.",
       "color": c,
@@ -23,31 +23,36 @@ var Help = function (c,msg){
       "fields": [
         {
           "name": "Commands",
-          "value": "all the commands are case sensitive. No spaces between Roles"
+          "value": "PS: ❌No spaces between Roles❌"
         },
         {
-          "name": "lfg dungeon roles name message(optional)",
+          "name": "💮 lfg dungeon roles name message(optional)",
           "value": "e.g : `lfg GVH T/H Mizettorisu 3/5 training run`"
         },
         {
-          "name": "lfg help",
+          "name": "💮 lfg help",
           "value": "Shows this help message."
         },
         {
-          "name": "lfg stats",
+          "name": "💮 lfg stats",
           "value": "Shows the member count and servers list."
         },
         {
-          "name": "lfg addserver",
+          "name": "💮 lfg addserver",
           "value": "adds the server to the bot's lfg list. Only server owner and bot owner can use this command."
         },
         {
-          "name": "lfg deleteserver",
+          "name": "💮 lfg deleteserver",
           "value": "Removes the server from the bot's lfg list. Only server owner and bot owner can use this command."
+        },
+        {
+          "name": "⚠️ Invite link for bot ⚠️",
+          "value": "[Click me!](https://discordapp.com/api/oauth2/authorize?client_id=316693341435723777&permissions=355392&scope=bot)"
         }
       ]
     };    msg.channel.send({ embed });
 };
+
 
 module.exports = {
   Game,
